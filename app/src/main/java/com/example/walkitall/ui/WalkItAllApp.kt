@@ -6,7 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.walkitall.ui.mapview.MapView
+import com.example.walkitall.ui.mappage.MapPage
 import com.example.walkitall.ui.theme.WalkItAllTheme
 
 @Composable
@@ -20,7 +20,7 @@ fun WalkItAllApp(modifier: Modifier = Modifier) {
         },
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
-        MapView(Modifier.Companion.padding(innerPadding))
+        MapPage(Modifier.Companion.padding(innerPadding))
     }
 }
 

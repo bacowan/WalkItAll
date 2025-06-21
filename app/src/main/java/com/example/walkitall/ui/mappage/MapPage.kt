@@ -1,10 +1,24 @@
 package com.example.walkitall.ui.mappage
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.walkitall.ui.theme.WalkItAllTheme
 import com.example.walkitall.utils.loadProperties
 import com.maplibre.compose.MapView
@@ -15,6 +29,8 @@ import com.maplibre.compose.rememberSaveableMapViewCamera
 
 @Composable
 fun MapPage(modifier: Modifier = Modifier) {
+    var isWalking by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
     val styleUrl = remember {
         val apiKey = try {
@@ -35,11 +51,36 @@ fun MapPage(modifier: Modifier = Modifier) {
             )
         )
     )
-    MapView(
-        modifier = modifier,
-        styleUrl = styleUrl,
-        camera = mapViewCamera
-    )
+
+    Box(modifier = modifier.fillMaxSize()) {
+        MapView(
+            modifier = Modifier.fillMaxSize(),
+            styleUrl = styleUrl,
+            camera = mapViewCamera
+        )
+
+        FloatingActionButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+            onClick = {
+                isWalking = !isWalking
+            }
+        ) {
+            if (isWalking) {
+                Icon(
+                    imageVector = Icons.Filled.Stop,
+                    contentDescription = "Stop"
+                )
+            }
+            else {
+                Icon(
+                    imageVector = Icons.Filled.PlayArrow,
+                    contentDescription = "Start"
+                )
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)

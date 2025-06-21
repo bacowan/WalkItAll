@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.FloatingActionButton
@@ -36,7 +35,7 @@ fun MapPage(modifier: Modifier = Modifier) {
         val apiKey = try {
             val properties = loadProperties(context)
             properties.getProperty("MAPTILER_KEY")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // TODO: Exception handling
             null
         }
@@ -63,9 +62,7 @@ fun MapPage(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            onClick = {
-                isWalking = !isWalking
-            }
+            onClick = { isWalking = !isWalking }
         ) {
             if (isWalking) {
                 Icon(
@@ -80,6 +77,10 @@ fun MapPage(modifier: Modifier = Modifier) {
                 )
             }
         }
+    }
+
+    if (isWalking) {
+        LocationPermissionRequester()
     }
 }
 

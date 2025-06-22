@@ -1,5 +1,6 @@
 package com.example.walkitall.ui.mappage
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,16 +32,7 @@ fun MapPage(modifier: Modifier = Modifier) {
     var isWalking by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val styleUrl = remember {
-        val apiKey = try {
-            val properties = loadProperties(context)
-            properties.getProperty("MAPTILER_KEY")
-        } catch (_: Exception) {
-            // TODO: Exception handling
-            null
-        }
-        apiKey?.let { "https://api.maptiler.com/maps/streets/style.json?key=$it" } ?: "https://demotiles.maplibre.org/style.json"
-    }
+    val styleUrl = getStyleUrl(context)
 
     var mapViewCamera = rememberSaveableMapViewCamera(
         initialCamera = MapViewCamera(
@@ -82,6 +74,22 @@ fun MapPage(modifier: Modifier = Modifier) {
     if (isWalking) {
         LocationPermissionRequester()
     }
+}
+
+@Composable
+private fun getStyleUrl(context: Context): String {
+    val styleUrl = remember {
+        val apiKey = try {
+            val properties = loadProperties(context)
+            properties.getProperty("MAPTILER_KEY")
+        } catch (_: Exception) {
+            // TODO: Exception handling
+            null
+        }
+        apiKey?.let { "https://api.maptiler.com/maps/streets/style.json?key=$it" }
+            ?: "https://demotiles.maplibre.org/style.json"
+    }
+    return styleUrl
 }
 
 @Preview(showBackground = true)

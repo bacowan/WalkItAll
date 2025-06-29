@@ -27,10 +27,15 @@ import androidx.core.content.ContextCompat
 import com.example.walkitall.ui.theme.WalkItAllTheme
 import com.example.walkitall.utils.loadProperties
 import com.google.android.gms.location.LocationServices
-import com.maplibre.compose.MapView
-import com.maplibre.compose.camera.CameraState
-import com.maplibre.compose.camera.MapViewCamera
-import com.maplibre.compose.rememberSaveableMapViewCamera
+import dev.sargunv.maplibrecompose.compose.MaplibreMap
+import dev.sargunv.maplibrecompose.compose.layer.CircleLayer
+import dev.sargunv.maplibrecompose.compose.rememberCameraState
+import dev.sargunv.maplibrecompose.compose.source.rememberGeoJsonSource
+import dev.sargunv.maplibrecompose.core.CameraPosition
+import dev.sargunv.maplibrecompose.core.source.GeoJsonData.Features
+import io.github.dellisd.spatialk.geojson.Point
+import io.github.dellisd.spatialk.geojson.Position
+import io.github.dellisd.spatialk.geojson.FeatureCollection
 
 
 @Composable
@@ -41,16 +46,17 @@ fun MapPage(modifier: Modifier = Modifier) {
     var location by remember { mutableStateOf<Location?>(null) }
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
 
-    val styleUrl = remember { getStyleUrl(context) }
+    val styleUri = remember { getStyleUrl(context) }
 
-    var mapViewCamera = rememberSaveableMapViewCamera(
-        initialCamera = MapViewCamera(
-            CameraState.Centered(
-                latitude = 35.689487,
-                longitude = 139.691711
-            )
+    val camera =
+        rememberCameraState(
+            firstPosition =
+                CameraPosition(target = Position(latitude = 35.689487, longitude = 139.691711), zoom = 13.0)
         )
-    )
+
+    location?.let {
+        camera.position = CameraPosition(target = Position(latitude = it.latitude, longitude = it.longitude), zoom = 13.0)
+    }
 
     // Get the initial location based on the last known location
     LaunchedEffect(Unit) {
@@ -67,11 +73,32 @@ fun MapPage(modifier: Modifier = Modifier) {
 
 
     Box(modifier = modifier.fillMaxSize()) {
-        MapView(
-            modifier = Modifier.fillMaxSize(),
-            styleUrl = styleUrl,
-            camera = mapViewCamera
-        )
+
+        MaplibreMap(
+            styleUri = styleUri,
+            cameraState = camera
+        ) {
+
+            val userLocationSource = rememberGeoJsonSource(
+                id = "user_location_source",
+                data = Features(
+                    geoJson = FeatureCollection()
+                )
+            )
+
+            location?.let {
+                userLocationSource.setData(
+                    Features(Point(Position(it.longitude, it.latitude)))
+                )
+            }
+
+
+
+            CircleLayer(
+                id = "location",
+                source = userLocationSource
+            )
+        }
 
         FloatingActionButton(
             modifier = Modifier

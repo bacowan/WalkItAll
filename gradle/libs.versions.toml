@@ -7,10 +7,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.06.00"
-maplibreCompose = "0.0.16"
-mapsCompose = "6.4.1"
-materialIconsExtendedAndroid = "1.7.8"
+composeBom = "2025.06.01"
 playServicesLocation = "21.3.0"
 
 [libraries]
@@ -29,7 +26,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-maplibre-compose = { module = "io.github.rallista:maplibre-compose", version.ref = "maplibreCompose" }
+maplibre-compose = { module = "dev.sargunv.maplibre-compose:maplibre-compose", version = "0.9.1" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
